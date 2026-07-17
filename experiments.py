@@ -64,37 +64,6 @@ def e1_machine_checks():
 def random_valid_object(depth: int, tension: Fraction, saturate=False):
     """Random VAMP-valid proof DAG, audited-rule regime."""
     rnd = lambda hi: F(random.randint(0, int(hi * 100)), 100)
-    nodes, frontier = [], []
-    for i in range(random.randint(2, 4)):
-        n = Node(f"p{i}", "premise", rnd(0.10))
-        nodes.append(n); frontier.append(n)
-    k = 0
-    for d in range(depth):
-        cls_t = tension if random.random() < 0.5 else F(0)
-        m = random.choice([1, 1, 2])
-        m = min(m, len(frontier))
-        asserts = random.sample(frontier, m)
-        w = Node(f"w{d}", "premise", rnd(0.10), is_rule=True)
-        nodes.append(w)
-        bound = sum((a.alpha for a in asserts), F(0)) + w.alpha + cls_t
-        alpha = min(bound, F(1)) if saturate else \
-            min(F(random.randint(0, int(bound * 100)), 100), F(1))
-        v = Node(f"v{d}", "vamp", alpha, premises=[a.nid for a in asserts],
-                 imp=w.nid, cls=f"c{d}", is_action=(d == depth - 1))
-        nodes.append(v); frontier.append(v); k += 1
-    T = {f"c{d}": (tension if nodes[-1] else F(0)) for d in range(depth)}
-    # rebuild T faithfully from the nodes we created
-    T = {}
-    for n in nodes:
-        if n.kind == "vamp":
-            T[n.cls] = None
-    # recompute per-step tensions consistently with verification bounds:
-    # store tensions on creation instead (redo cleanly below).
-    return None
-
-
-def random_valid_object2(depth: int, tension: Fraction, saturate=False):
-    rnd = lambda hi: F(random.randint(0, int(hi * 100)), 100)
     nodes, frontier, T = [], [], {}
     for i in range(random.randint(2, 4)):
         n = Node(f"p{i}", "premise", rnd(0.10))
@@ -121,7 +90,7 @@ def random_valid_object2(depth: int, tension: Fraction, saturate=False):
 def e2_theorem_validation(n_objects=10000, mutants=2000):
     viol, checked = 0, 0
     for _ in range(n_objects):
-        pi, T = random_valid_object2(random.randint(1, 8), F(3, 10))
+        pi, T = random_valid_object(random.randint(1, 8), F(3, 10))
         r = vamp_audit(pi, T, {"x": F(10)}, {"x"}, F(2))  # thresholds vacuous
         assert r.kappa == "certified", r.failure
         for nid, n in pi.nodes.items():
@@ -130,7 +99,7 @@ def e2_theorem_validation(n_objects=10000, mutants=2000):
                 viol += 1
     detected = 0
     for _ in range(mutants):
-        pi, T = random_valid_object2(random.randint(1, 6), F(3, 10))
+        pi, T = random_valid_object(random.randint(1, 6), F(3, 10))
         derived = [n for n in pi.nodes.values() if n.kind == "vamp"]
         m = random.choice(derived)
         asserts = [pi.nodes[p].alpha for p in m.premises]
@@ -221,7 +190,7 @@ def e4_horizon(trials=2000):
     for depth in range(1, 9):
         cert = 0
         for _ in range(trials):
-            pi, T = random_valid_object2(depth, F(3, 10), saturate=False)
+            pi, T = random_valid_object(depth, F(3, 10), saturate=False)
             r = vamp_audit(pi, T, {"esc": theta_star}, {"esc"}, F(2))
             cert += (r.kappa == "certified")
         rows.append({"depth": depth, "cert_rate": round(cert / trials, 3)})
