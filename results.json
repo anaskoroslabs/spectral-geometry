@@ -1,0 +1,134 @@
+{
+  "E1": {
+    "rejected_variant": {
+      "kappa": "rejected",
+      "beta_P6": "2/5",
+      "beta_P7": "7/10",
+      "theta_star": "3/5"
+    },
+    "certified_variant": {
+      "kappa": "certified",
+      "beta_P6p": "2/5"
+    },
+    "counterexample": {
+      "alpha_v": "4/5",
+      "B_tree_v": "4/5",
+      "naive_B_DAG_v": "7/10",
+      "naive_unsound": true,
+      "tree_budget_dominates": true
+    }
+  },
+  "E2": {
+    "objects": 10000,
+    "nodes_checked": 119876,
+    "budget_violations": 0,
+    "mutants": 2000,
+    "mutants_detected": 2000,
+    "detection_rate": 1.0
+  },
+  "E3": {
+    "width": [
+      {
+        "dag_nodes": 800,
+        "seconds": 0.0049,
+        "us_per_node": 6.09
+      },
+      {
+        "dag_nodes": 8000,
+        "seconds": 0.0426,
+        "us_per_node": 5.33
+      },
+      {
+        "dag_nodes": 80000,
+        "seconds": 0.5327,
+        "us_per_node": 6.66
+      }
+    ],
+    "ladder": [
+      {
+        "depth": 100,
+        "dag_nodes": 601,
+        "unfolded_nodes_approx": "~2^102",
+        "seconds": 0.0094,
+        "budget_bits": 106
+      },
+      {
+        "depth": 1000,
+        "dag_nodes": 6001,
+        "unfolded_nodes_approx": "~2^1002",
+        "seconds": 0.0359,
+        "budget_bits": 1006
+      },
+      {
+        "depth": 4000,
+        "dag_nodes": 24001,
+        "unfolded_nodes_approx": "~2^4002",
+        "seconds": 0.1623,
+        "budget_bits": 4006
+      }
+    ]
+  },
+  "E4": {
+    "random_dags_T0.3_theta0.6": [
+      {
+        "depth": 1,
+        "cert_rate": 1.0
+      },
+      {
+        "depth": 2,
+        "cert_rate": 0.912
+      },
+      {
+        "depth": 3,
+        "cert_rate": 0.83
+      },
+      {
+        "depth": 4,
+        "cert_rate": 0.759
+      },
+      {
+        "depth": 5,
+        "cert_rate": 0.72
+      },
+      {
+        "depth": 6,
+        "cert_rate": 0.656
+      },
+      {
+        "depth": 7,
+        "cert_rate": 0.617
+      },
+      {
+        "depth": 8,
+        "cert_rate": 0.582
+      }
+    ],
+    "chain_by_tension_count": [
+      {
+        "high_tension_steps": 0,
+        "B_at_action": "1/20",
+        "kappa": "certified"
+      },
+      {
+        "high_tension_steps": 1,
+        "B_at_action": "7/20",
+        "kappa": "certified"
+      },
+      {
+        "high_tension_steps": 2,
+        "B_at_action": "13/20",
+        "kappa": "rejected"
+      },
+      {
+        "high_tension_steps": 3,
+        "B_at_action": "19/20",
+        "kappa": "rejected"
+      },
+      {
+        "high_tension_steps": 4,
+        "B_at_action": "5/4",
+        "kappa": "rejected"
+      }
+    ]
+  }
+}
